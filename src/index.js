@@ -4,7 +4,11 @@ import { GraphQLServer } from 'graphql-yoga';
 const typeDefs = `
     type Query {
         hello: String!
+    type User {
+        id: ID!
         name: String!
+        email: String!
+        age: Int
     }
 `
 
