@@ -3,7 +3,9 @@ import { GraphQLServer } from 'graphql-yoga';
 // Type definition ( schema )
 const typeDefs = `
     type Query {
-        hello: String!
+        me: User!
+    }
+
     type User {
         id: ID!
         name: String!
@@ -15,11 +17,13 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
     Query: {
-        hello() {
-            return 'Hello GraphQL!'
-        },
-        name() {
-            return 'GraphQL 4000'
+        me() {
+            return {
+                id: '123098',
+                name: 'John',
+                email: 'john@example.com',
+                age: null
+            }
         }
     }
 }
