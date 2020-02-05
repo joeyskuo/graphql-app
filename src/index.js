@@ -1,4 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga';
+import { data } from './dummyData';
 
 // Type definition ( schema )
 const typeDefs = `
