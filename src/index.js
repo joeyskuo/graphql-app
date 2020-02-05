@@ -4,6 +4,7 @@ import { GraphQLServer } from 'graphql-yoga';
 const typeDefs = `
     type Query {
         me: User!
+        users: [User!]!
         post: Post!
     }
 
@@ -30,6 +31,11 @@ const resolvers = {
                 name: 'John',
                 email: 'john@example.com',
                 age: null
+            }
+        },
+        users(parent, args, ctx, info) {
+            return data.users
+        },
         post() {
             return {
                 id: '099',
