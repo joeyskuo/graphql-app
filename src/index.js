@@ -29,6 +29,12 @@ const resolvers = {
                 name: 'John',
                 email: 'john@example.com',
                 age: null
+        post() {
+            return {
+                id: '099',
+                title: 'GraphQL APIs',
+                body: '',
+
             }
         }
     }
