@@ -4,6 +4,7 @@ import { GraphQLServer } from 'graphql-yoga';
 const typeDefs = `
     type Query {
         me: User!
+        post: Post!
     }
 
     type User {
