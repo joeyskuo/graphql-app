@@ -12,6 +12,12 @@ const typeDefs = `
         email: String!
         age: Int
     }
+
+    type Post {
+        id: ID!
+        title: String!
+        published: Boolean!
+    }
 `
 
 // Resolvers
