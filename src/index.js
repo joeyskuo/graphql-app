@@ -63,6 +63,13 @@ const resolvers = {
                 published: true
             }
         }
+    },
+    Post: {
+        author(parent, args, ctx, info) {
+            return data.users.find((user) => {
+                return user.id === parent.author
+            })
+        }
     }
 }
 
