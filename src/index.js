@@ -49,7 +49,7 @@ const resolvers = {
                 id: '099',
                 title: 'GraphQL APIs',
                 body: '',
-
+                published: true
             }
         }
     }
