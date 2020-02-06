@@ -5,7 +5,7 @@ import { data } from './dummyData';
 const typeDefs = `
     type Query {
         me: User!
-        users: [User!]!
+        users(query: String): [User!]!
         post: Post!
     }
 
@@ -35,7 +35,13 @@ const resolvers = {
             }
         },
         users(parent, args, ctx, info) {
-            return data.users
+            if(!args.query) {
+                return data.users;
+            }
+
+            return data.users.filter((user) => {
+                return user.name.toLowerCase().includes(args.query.toLowerCase())
+            })
         },
         post() {
             return {
