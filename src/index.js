@@ -24,6 +24,11 @@ const typeDefs = `
         body: String!
         published: Boolean!
         author: User!
+    type Comment {
+        id: ID!
+        text: String!
+        author: User!
+        post: Post!
     }
 `
 
