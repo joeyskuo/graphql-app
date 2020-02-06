@@ -7,6 +7,7 @@ const typeDefs = `
         me: User!
         users(query: String): [User!]!
         post: Post!
+        posts(query: String): [Post!]!
     }
 
     type User {
@@ -42,6 +43,15 @@ const resolvers = {
 
             return data.users.filter((user) => {
                 return user.name.toLowerCase().includes(args.query.toLowerCase())
+            })
+        },
+        posts(parent, args, ctx, info) {
+            if(!args.query) {
+                return data.posts
+            }
+
+            return data.posts.filter((post) => {
+                return post.title.toLowerCase().includes(args.query.toLowerCase()) || post.body.toLowerCase().includes(args.query.toLowerCase())
             })
         },
         post() {
