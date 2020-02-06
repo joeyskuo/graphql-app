@@ -79,12 +79,22 @@ const resolvers = {
             return data.users.find((user) => {
                 return user.id === parent.author
             })
+        },
+        comments(parent, args, ctx, info) {
+            return data.comments.filter((comment) => {
+                return comment.post === parent.id
+            })
         }
     },
     User: {
         posts(parent, args, ctx, info) {
             return data.posts.filter((post) => {
                 return post.author === parent.id
+            })
+        },
+        comments(parent, args, ctx, info) {
+            return data.comments.filter((comment) => {
+                return comment.author === parent.id
             })
         }
     }
