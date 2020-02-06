@@ -37,5 +37,30 @@ export const data = {
         body: '',
         published: false,
         author: '3'
+    }],
+
+    comments: [{
+        id: '1',
+        text: 'Thank you for writing this article',
+        author: '2',
+        post: '1'
+    },
+    {
+        id: '2',
+        text: 'Part 2 of GraphQL Queries will be up soon!',
+        author: '1',
+        post: '1'
+    },
+    {
+        id: '3',
+        text: 'Test comment',
+        author: '2',
+        post: '1'
+    },
+    {
+        id: '4',
+        text: 'Please feel free to ask any questions below',
+        author: '3',
+        post: '3'
     }]
 }
