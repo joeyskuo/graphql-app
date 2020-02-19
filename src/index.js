@@ -14,7 +14,6 @@ const typeDefs = `
         id: ID!
         name: String!
         email: String!
-        age: Int
         posts: [Post!]!
         comments: [Comment!]!
     }
@@ -43,8 +42,7 @@ const resolvers = {
             return {
                 id: '123098',
                 name: 'John',
-                email: 'john@example.com',
-                age: null
+                email: 'john@example.com'
             }
         },
         users(parent, args, ctx, info) {
