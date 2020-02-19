@@ -1,5 +1,6 @@
 import { GraphQLServer } from 'graphql-yoga';
 import { data } from './dummyData';
+import uuidv4 from 'uuid/v4';
 
 // Type definition ( schema )
 const typeDefs = `
@@ -8,6 +9,10 @@ const typeDefs = `
         users(query: String): [User!]!
         post: Post!
         posts(query: String): [Post!]!
+    }
+
+    type Mutation {
+        createUser(name: String!, email: String!): User!
     }
 
     type User {
@@ -70,6 +75,25 @@ const resolvers = {
                 body: '',
                 published: true
             }
+        }
+    },
+    Mutation: {
+        createUser(parent, args, ctx, info) {
+            const emailTaken = data.users.some((user) => user.email === args.email)
+
+            if(emailTaken) {
+                throw new Error('Email already exists.')
+            }
+
+            const user = {
+                id: uuidv4(),
+                name: args.name,
+                email: args.email
+            }
+
+            data.users.push(user)
+
+            return user
         }
     },
     Post: {
