@@ -13,6 +13,7 @@ const typeDefs = `
 
     type Mutation {
         createUser(input: CreateUserInput!): User!
+        deleteUser(id: ID!): User!
         createPost(input: CreatePostInput!): Post!
         createComment(input: CreateCommentInput!): Comment!
     }
@@ -113,6 +114,34 @@ const resolvers = {
             data.users.push(user)
 
             return user
+        },
+        deleteUser(parent, args, ctx, info) {
+            const userIndex = data.users.findIndex((user) => user.id === args.id);
+
+            if(userIndex === -1) {
+                throw new Error('User not found.')
+            }
+
+            const targetUser = data.users.splice(userIndex, 1);
+
+            // delete all authored posts and their comments
+            data.posts = data.posts.filter((post) => {
+
+                const match = post.author === args.id
+
+                if(match) {
+                    data.comments = data.comments.filter((comment) => comment.author !== post.id)
+                }
+
+                return !match
+
+            })
+
+            // delete all authored comments
+            data.comments = data.comments.filter((comment) => comment.author !== args.id)
+
+
+            return targetUser[0];
         },
         createPost(parent, args, ctx, info) {
             const userExists = data.users.some((user) => user.id === args.input.author);
