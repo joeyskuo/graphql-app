@@ -83,11 +83,16 @@ const Mutation = {
         }
 
         data.posts.push(post)
-        pubsub.publish('posts', { post })
+        pubsub.publish('posts', { 
+            post: {
+                mutation: 'CREATED',
+                data: post
+            }
+         })
 
         return post
     },
-    deletePost(parent, args, { data }, info) {
+    deletePost(parent, args, { data, pubsub }, info) {
         const postIndex = data.posts.findIndex((post) => post.id === args.id);
 
         if(postIndex === -1) {
@@ -95,17 +100,29 @@ const Mutation = {
         }
 
         // remove target post
-        const targetPost = data.posts.splice(postIndex, 1);
+        const [targetPost] = data.posts.splice(postIndex, 1);
 
         // delete comments associated with post
         data.comments = data.comments.filter((comment) => comment.post !== args.id)
 
-        return targetPost[0];
+        if(targetPost.published) {
+
+            pubsub.publish('posts', { 
+                post: {
+                    mutation: 'DELETED',
+                    data: targetPost
+                }
+             })
+
+        }
+
+        return targetPost;
     },
-    updatePost(parent, args, { data }, info) {
+    updatePost(parent, args, { data, pubsub }, info) {
         const { id, input } = args
 
         const post = data.posts.find((post) => post.id === id)
+        const originalPost = {...post};
 
         if(!post) {
             throw new Error('Post not found.')
@@ -121,6 +138,33 @@ const Mutation = {
 
         if(typeof input.published === 'boolean') {
             post.published = input.published
+
+            if(originalPost.published && !post.published) {
+                // deleted
+                pubsub.publish('post', {
+                    post: {
+                        mutation: 'DELETED',
+                        data: originalPost
+                    }
+                })
+            } else if(!originalPost.published && post.published) {
+                // created
+                pubsub.publish('post', {
+                    post: {
+                        mutation: 'CREATED',
+                        data: post
+                    }
+                })
+            }
+
+        } else if(post.published) {
+            // updated
+            pubsub.publish('post', {
+                post: {
+                    mutation: 'UPDATED',
+                    data: post
+                }
+            })
         }
 
         return post
