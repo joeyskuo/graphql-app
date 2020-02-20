@@ -46,6 +46,30 @@ const Mutation = {
 
         return targetUser[0];
     },
+    updateUser(parent, args, { data }, info) {
+        const { id, input } = args
+        const user = data.users.find((user) => user.id === args.id)
+
+        if(!user) {
+            throw new Error('User not found')
+        }
+
+        if(typeof input.email === 'string') {
+            const emailTaken = data.users.some((user) => user.email === input.email)
+            if(emailTaken) {
+                throw new Error('Email already in use.')
+            } 
+
+            user.email = input.email
+        }
+
+        if(typeof input.name === 'string') {
+            user.name = input.name
+        }
+
+        return user
+
+    },
     createPost(parent, args, { data }, info) {
         const userExists = data.users.some((user) => user.id === args.input.author);
 
