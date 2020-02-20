@@ -186,11 +186,16 @@ const Mutation = {
         }
 
         data.comments.push(comment)
-        pubsub.publish(`comment ${args.input.post}`, { comment })
+        pubsub.publish(`comment ${args.input.post}`, { 
+            comment: {
+                mutation: 'CREATED',
+                data: comment
+            }
+         })
 
         return comment
     },
-    deleteComment(parent, args, { data }, info) {
+    deleteComment(parent, args, { data, pubsub }, info) {
         const commentIndex = data.comments.findIndex((comment) => comment.id === args.id);
 
         if(commentIndex === -1) {
@@ -198,9 +203,16 @@ const Mutation = {
         }
 
         // remove target post
-        const targetComment = data.comments.splice(commentIndex, 1);
+        const [targetComment] = data.comments.splice(commentIndex, 1);
 
-        return targetComment[0];
+        pubsub.publish(`comment ${targetComment.post}`, { 
+            comment: {
+                mutation: 'DELETED',
+                data: targetComment
+            }
+         })
+
+        return targetComment;
     },
     updateComment(parent, args, { data }, info) {
         const { id, input } = args
