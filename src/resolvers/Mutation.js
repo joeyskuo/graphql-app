@@ -106,6 +106,10 @@ const Mutation = {
 
         const post = data.posts.find((post) => post.id === id)
 
+        if(!post) {
+            throw new Error('Post not found.')
+        }
+
         if(typeof input.title === 'string') {
             post.title = input.title
         }
@@ -156,6 +160,10 @@ const Mutation = {
         const { id, input } = args
 
         const comment = data.comments.find((comment) => comment.id === id)
+
+        if(!comment) {
+            throw new Error('Comment not found.')
+        }
 
         if(typeof input.text === 'string') {
             comment.text = input.text
