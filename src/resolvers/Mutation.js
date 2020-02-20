@@ -48,7 +48,7 @@ const Mutation = {
     },
     updateUser(parent, args, { data }, info) {
         const { id, input } = args
-        const user = data.users.find((user) => user.id === args.id)
+        const user = data.users.find((user) => user.id === id)
 
         if(!user) {
             throw new Error('User not found')
@@ -101,6 +101,25 @@ const Mutation = {
 
         return targetPost[0];
     },
+    updatePost(parent, args, { data }, info) {
+        const { id, input } = args
+
+        const post = data.posts.find((post) => post.id === id)
+
+        if(typeof input.title === 'string') {
+            post.title = input.title
+        }
+
+        if(typeof input.body === 'string') {
+            post.body = input.body
+        }
+
+        if(typeof input.published === 'boolean') {
+            post.published = input.published
+        }
+
+        return post
+    },
     createComment(parent, args, { data }, info) {
         const userExists = data.users.some((user) => user.id === args.input.author);
         const postExists = data.posts.some((post) => post.id === args.input.post);
@@ -132,7 +151,19 @@ const Mutation = {
         const targetComment = data.comments.splice(commentIndex, 1);
 
         return targetComment[0];
+    },
+    updateComment(parent, args, { data }, info) {
+        const { id, input } = args
+
+        const comment = data.comments.find((comment) => comment.id === id)
+
+        if(typeof input.text === 'string') {
+            comment.text = input.text
+        }
+
+        return comment
     }
+    
 }
 
 export { Mutation as default}
